@@ -29,7 +29,7 @@ DepthMapPublisherNode::DepthMapPublisherNode(
 
 
     bool outputDepth = true;
-    bool outputRectified = true;
+    bool outputRectified = true;  // Enable 
     bool lrcheck  = false;
     bool extended = false;
     bool subpixel = false;
@@ -38,10 +38,22 @@ DepthMapPublisherNode::DepthMapPublisherNode(
     auto stereo = p_.create<dai::node::StereoDepth>();
     auto monoLeft = p_.create<dai::node::MonoCamera>();
     auto monoRight = p_.create<dai::node::MonoCamera>();
+    auto xoutLeft  = p.create<dai::node::XLinkOut>();
+    auto xoutRight = p.create<dai::node::XLinkOut>();
+    auto xoutDisp  = p.create<dai::node::XLinkOut>();
+    auto xoutRectifL = p.create<dai::node::XLinkOut>();
+    auto xoutRectifR = p.create<dai::node::XLinkOut>();          
     auto colorCam = p_.create<dai::node::ColorCamera>();
     auto xlinkColorOut = p_.create<dai::node::XLinkOut>();
     auto xoutDepth = p_.create<dai::node::XLinkOut>();
  
+          
+    // XLinkOut
+    xoutLeft->setStreamName("left");
+    xoutRight->setStreamName("right"); 
+    xoutDisp->setStreamName("disparity"); 
+    xoutRectifL->setStreamName("rectified_left");
+    xoutRectifR->setStreamName("rectified_right");
     xlinkColorOut->setStreamName("video");
     xoutDepth->setStreamName("depth");
 
@@ -88,13 +100,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
 
     auto depthQueue = oak_->getOutputQueue("depth", 8, true);
     auto videoQueue = oak_->getOutputQueue("video");
-    
-    
-    
-    //// // 'right' - right mono camera preview //  //  //  // 
-    auto rightQueue = oak_->getOutputQueue("video");
-   //////
-
+    auto rightQueue = oak_->getOutputQueue("right");
 
     cv::Mat frame;
     
@@ -108,10 +114,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
 
         auto depth = depthQueue->get<dai::ImgFrame>();
         auto imgFrame = videoQueue->get<dai::ImgFrame>();
-        
-        ////////////
-        auto rightFrame = rightQueue->get<dai::ImgFrame>();
-        //////////
+        auto rightFrame = rightQueue->get<dai::ImgFrame>(); // adding right stream
 
         if(imgFrame){
             frame = cv::Mat(imgFrame->getHeight() * 3 / 2, imgFrame->getWidth(), CV_8UC1, imgFrame->getData().data());
