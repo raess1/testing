@@ -102,7 +102,12 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
 
     auto depthQueue = oak_->getOutputQueue("depth", 8, true);
     auto videoQueue = oak_->getOutputQueue("video");
+    //auto leftQueue = d.getOutputQueue("left", 8, true);
     auto rightQueue = oak_->getOutputQueue("right");
+    //auto dispQueue = withDepth ? d.getOutputQueue("disparity", 8, true) : nullptr;
+    //auto depthQueue = withDepth ? d.getOutputQueue("depth", 8, true) : nullptr;
+    //auto rectifLeftQueue = withDepth ? d.getOutputQueue("rectified_left", 8, true) : nullptr;
+    //auto rectifRightQueue = withDepth ? d.getOutputQueue("rectified_right", 8, true) : nullptr;
 
     cv::Mat frame;
     
@@ -116,7 +121,10 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
 
         auto depth = depthQueue->get<dai::ImgFrame>();
         auto imgFrame = videoQueue->get<dai::ImgFrame>();
+        //auto leftFrame = leftQueue->get<dai::ImgFrame>(); // adding left stream
         auto rightFrame = rightQueue->get<dai::ImgFrame>(); // adding right stream
+        //auto rectifL = rectifLeftQueue->get<dai::ImgFrame>();
+        //auto rectifR = rectifRightQueue->get<dai::ImgFrame>();
 
         if(imgFrame){
             frame = cv::Mat(imgFrame->getHeight() * 3 / 2, imgFrame->getWidth(), CV_8UC1, imgFrame->getData().data());
@@ -130,6 +138,15 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
 
             rgb_pub_.publish(color_msg);
         }
+        
+        //if(leftFrame){
+ 		//sensor_msgs::ImagePtr left_msg =
+        //        cv_bridge::CvImage(
+        //            header, sensor_msgs::image_encodings::MONO8,
+        //            cv::Mat(leftFrame->getHeight(), leftFrame->getWidth(), CV_8UC1, leftFrame->getData().data()))
+        //            .toImageMsg();
+        //    left_pub_.publish(left_msg);
+        //}
 
         if(rightFrame){
  		sensor_msgs::ImagePtr right_msg =
@@ -140,6 +157,8 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
             right_pub_.publish(right_msg);
         }
         
+        
+        
         if(depth){
             sensor_msgs::ImagePtr depthmap_msg =
                 cv_bridge::CvImage(
@@ -148,6 +167,25 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
                     .toImageMsg();
             depth_map_pub_.publish(depthmap_msg);
         }
+        
+        //if (rectifL) {
+ 		//sensor_msgs::ImagePtr rectifL_msg =
+        //        cv_bridge::CvImage(
+        //            header, sensor_msgs::image_encodings::MONO8,
+        //            cv::Mat(rectifL->getHeight(), rectifL->getWidth(), CV_8UC1, rectifL->getData().data()))
+        //            .toImageMsg();
+        //    rectifL_pub_.publish(rectifL_msg);
+        //}
+        
+        //if (rectifR) {
+ 		//sensor_msgs::ImagePtr rectifR_msg =
+        //        cv_bridge::CvImage(
+        //            header, sensor_msgs::image_encodings::MONO8,
+        //            cv::Mat(rectifR->getHeight(), rectifR->getWidth(), CV_8UC1, rectifR->getData().data()))
+        //            .toImageMsg();
+        //    rectifR_pub_.publish(rectifR_msg);
+        //}
+        
         
 
         ros::spinOnce();
