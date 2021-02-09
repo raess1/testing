@@ -181,7 +181,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
         //if(disparityFrame){
  		//sensor_msgs::ImagePtr disparity_msg =
         //        cv_bridge::CvImage(
-        //            header, sensor_msgs::image_encodings::MONO8, //Check
+        //            header, sensor_msgs::image_encodings::CV_8UC1, //Check
         //            cv::Mat(disparityFrame->getHeight(), disparityFrame->getWidth(), CV_8UC1, disparityFrame->getData().data())) //Check
         //            .toImageMsg();
         //    disparity_pub_.publish(disparity_msg);
@@ -190,7 +190,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
         //if (rectifL) {
  		//sensor_msgs::ImagePtr rectifL_msg =
         //        cv_bridge::CvImage(
-        //            header, sensor_msgs::image_encodings::MONO8,  //Check
+        //            header, sensor_msgs::image_encodings::CV_8UC1,  //Check
         //            cv::Mat(rectifL->getHeight(), rectifL->getWidth(), CV_8UC1, rectifL->getData().data())) //Check
         //            .toImageMsg();
         //    rectified_left_topic_pub_.publish(rectifL_msg);
@@ -199,7 +199,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
         //if (rectifR) {
  		//sensor_msgs::ImagePtr rectifR_msg =
         //        cv_bridge::CvImage(
-        //            header, sensor_msgs::image_encodings::MONO8, //Check
+        //            header, sensor_msgs::image_encodings::CV_8UC1, //Check
         //            cv::Mat(rectifR->getHeight(), rectifR->getWidth(), CV_8UC1, rectifR->getData().data())) //Check
         //            .toImageMsg();
         //    rectified_right_topic_pub_.publish(rectifR_msg);
