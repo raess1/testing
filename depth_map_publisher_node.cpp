@@ -254,6 +254,7 @@ int main(int argc, char** argv)
 
     depthai_ros::DepthMapPublisherNode depth_publisher(
         config_file_path, depth_map_topic, landmark_topic, rgb_topic, right_topic, rate);
+        //config_file_path, depth_map_topic, landmark_topic, rgb_topic, left_topic, right_topic, disparity_topic, rectified_left_topic, rectified_right_topic, rate);
     depth_publisher.Publisher(disparity_confidence_threshold);
 
     return 0;
