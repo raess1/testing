@@ -56,6 +56,8 @@ DepthMapPublisherNode::DepthMapPublisherNode(
     xoutRectifR->setStreamName("rectified_right");
     xlinkColorOut->setStreamName("video");
     xoutDepth->setStreamName("depth");
+          
+          
 
     // colorCam->setPreviewSize(300, 300);
     colorCam->setResolution(dai::ColorCameraProperties::SensorResolution::THE_1080_P);
