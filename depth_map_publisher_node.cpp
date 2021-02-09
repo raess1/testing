@@ -14,6 +14,7 @@ DepthMapPublisherNode::DepthMapPublisherNode(
       config_file_path_(config_file_path),
       depth_map_topic_(depth_map_topic),
       rgb_topic_(rgb_topic),
+      //left_topic_(left_topic),    
       right_topic_(right_topic),
       landmark_topic_(landmark_topic)
 {
@@ -24,6 +25,7 @@ DepthMapPublisherNode::DepthMapPublisherNode(
     // setup the publisher for depth map
     depth_map_pub_ = nh.advertise<sensor_msgs::Image>(depth_map_topic_, 2);
     rgb_pub_ = nh.advertise<sensor_msgs::Image>(rgb_topic_, 2);
+    //left_pub_ = nh.advertise<sensor_msgs::Image>(left_topic_, 2);
     right_pub_ = nh.advertise<sensor_msgs::Image>(right_topic_, 2);
     // start the device and create the pipeline
 
@@ -205,6 +207,7 @@ int main(int argc, char** argv)
     std::string config_file_path = "";
     std::string depth_map_topic = "";
     std::string rgb_topic = "";
+    //std::string left_topic = "";    
     std::string right_topic = "";
     std::string landmark_topic = "";
     int disparity_confidence_threshold;
@@ -215,6 +218,7 @@ int main(int argc, char** argv)
     bad_params += !pnh.getParam("config_file_path", config_file_path);
     bad_params += !pnh.getParam("depth_map_topic", depth_map_topic);
     bad_params += !pnh.getParam("rgb_topic", rgb_topic);
+    //bad_params += !pnh.getParam("left_topic", left_topic);
     bad_params += !pnh.getParam("right_topic", right_topic);
     bad_params += !pnh.getParam("landmark_topic", landmark_topic);
     bad_params += !pnh.getParam("disparity_confidence_threshold", disparity_confidence_threshold);
