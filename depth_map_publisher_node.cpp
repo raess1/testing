@@ -36,24 +36,24 @@ DepthMapPublisherNode::DepthMapPublisherNode(
 
     // Creating pipeline
     auto stereo = p_.create<dai::node::StereoDepth>();
-    auto monoLeft = p_.create<dai::node::MonoCamera>();
+    //auto monoLeft = p_.create<dai::node::MonoCamera>();
     auto monoRight = p_.create<dai::node::MonoCamera>();
-    auto xoutLeft  = p.create<dai::node::XLinkOut>();
+    //auto xoutLeft  = p.create<dai::node::XLinkOut>();
     auto xoutRight = p.create<dai::node::XLinkOut>();
-    auto xoutDisp  = p.create<dai::node::XLinkOut>();
-    auto xoutRectifL = p.create<dai::node::XLinkOut>();
-    auto xoutRectifR = p.create<dai::node::XLinkOut>();          
+    //auto xoutDisp  = p.create<dai::node::XLinkOut>();
+    //auto xoutRectifL = p.create<dai::node::XLinkOut>();
+    //auto xoutRectifR = p.create<dai::node::XLinkOut>();          
     auto colorCam = p_.create<dai::node::ColorCamera>();
     auto xlinkColorOut = p_.create<dai::node::XLinkOut>();
     auto xoutDepth = p_.create<dai::node::XLinkOut>();
  
           
     // XLinkOut
-    xoutLeft->setStreamName("left");
+    //xoutLeft->setStreamName("left");
     xoutRight->setStreamName("right"); 
-    xoutDisp->setStreamName("disparity"); 
-    xoutRectifL->setStreamName("rectified_left");
-    xoutRectifR->setStreamName("rectified_right");
+    //xoutDisp->setStreamName("disparity"); 
+    //xoutRectifL->setStreamName("rectified_left");
+    //xoutRectifR->setStreamName("rectified_right");
     xlinkColorOut->setStreamName("video");
     xoutDepth->setStreamName("depth");
           
