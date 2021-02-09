@@ -11,6 +11,7 @@ namespace depthai_ros
 DepthMapPublisherNode::DepthMapPublisherNode(
     const std::string& config_file_path, const std::string& depth_map_topic,
     const std::string& landmark_topic, const std::string& rgb_topic, const std::string& right_topic, const int rate) :
+    //const std::string& landmark_topic, const std::string& rgb_topic, const std::string& left_topic, const std::string& right_topic, const std::string& disparity_topic, const std::string& rectified_left_topic, const std::string& rectified_right_topic, const int rate) :
       config_file_path_(config_file_path),
       depth_map_topic_(depth_map_topic),
       rgb_topic_(rgb_topic),
