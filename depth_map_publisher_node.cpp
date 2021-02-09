@@ -16,17 +16,23 @@ DepthMapPublisherNode::DepthMapPublisherNode(
       rgb_topic_(rgb_topic),
       //left_topic_(left_topic),    
       right_topic_(right_topic),
+      //disparity_topic_(disparity_topic),
+      //rectified_left_topic_(rectified_left_topic),
+      //rectified_right_topic_(rectified_right_topic),
       landmark_topic_(landmark_topic)
 {
 
     ros::NodeHandle nh;
     ros::Rate loop_rate(rate);
 
-    // setup the publisher for depth map
+    // setup the publisher
     depth_map_pub_ = nh.advertise<sensor_msgs::Image>(depth_map_topic_, 2);
     rgb_pub_ = nh.advertise<sensor_msgs::Image>(rgb_topic_, 2);
     //left_pub_ = nh.advertise<sensor_msgs::Image>(left_topic_, 2);
     right_pub_ = nh.advertise<sensor_msgs::Image>(right_topic_, 2);
+    //disparity_pub_ = nh.advertise<sensor_msgs::Image>(disparity_topic_, 2);
+    //rectified_left_topic_pub_ = nh.advertise<sensor_msgs::Image>(rectified_left_topic_, 2);
+    //rectified_right_topic_pub_ = nh.advertise<sensor_msgs::Image>(rectified_right_topic_, 2);
     // start the device and create the pipeline
 
 
@@ -125,6 +131,7 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
         auto imgFrame = videoQueue->get<dai::ImgFrame>();
         //auto leftFrame = leftQueue->get<dai::ImgFrame>(); // adding left stream
         auto rightFrame = rightQueue->get<dai::ImgFrame>(); // adding right stream
+        //auto disparityFrame = dispQueue->get<dai::ImgFrame>(); // adding disparity stream
         //auto rectifL = rectifLeftQueue->get<dai::ImgFrame>();
         //auto rectifR = rectifRightQueue->get<dai::ImgFrame>();
 
@@ -170,22 +177,31 @@ void DepthMapPublisherNode::Publisher(uint8_t disparity_confidence_threshold)
             depth_map_pub_.publish(depthmap_msg);
         }
         
+        //if(disparityFrame){
+ 		//sensor_msgs::ImagePtr disparity_msg =
+        //        cv_bridge::CvImage(
+        //            header, sensor_msgs::image_encodings::MONO8, //Check
+        //            cv::Mat(disparityFrame->getHeight(), disparityFrame->getWidth(), CV_8UC1, disparityFrame->getData().data())) //Check
+        //            .toImageMsg();
+        //    disparity_pub_.publish(disparity_msg);
+        //}
+        
         //if (rectifL) {
  		//sensor_msgs::ImagePtr rectifL_msg =
         //        cv_bridge::CvImage(
-        //            header, sensor_msgs::image_encodings::MONO8,
-        //            cv::Mat(rectifL->getHeight(), rectifL->getWidth(), CV_8UC1, rectifL->getData().data()))
+        //            header, sensor_msgs::image_encodings::MONO8,  //Check
+        //            cv::Mat(rectifL->getHeight(), rectifL->getWidth(), CV_8UC1, rectifL->getData().data())) //Check
         //            .toImageMsg();
-        //    rectifL_pub_.publish(rectifL_msg);
+        //    rectified_left_topic_pub_.publish(rectifL_msg);
         //}
         
         //if (rectifR) {
  		//sensor_msgs::ImagePtr rectifR_msg =
         //        cv_bridge::CvImage(
-        //            header, sensor_msgs::image_encodings::MONO8,
-        //            cv::Mat(rectifR->getHeight(), rectifR->getWidth(), CV_8UC1, rectifR->getData().data()))
+        //            header, sensor_msgs::image_encodings::MONO8, //Check
+        //            cv::Mat(rectifR->getHeight(), rectifR->getWidth(), CV_8UC1, rectifR->getData().data())) //Check
         //            .toImageMsg();
-        //    rectifR_pub_.publish(rectifR_msg);
+        //    rectified_right_topic_pub_.publish(rectifR_msg);
         //}
         
         
@@ -209,6 +225,9 @@ int main(int argc, char** argv)
     std::string rgb_topic = "";
     //std::string left_topic = "";    
     std::string right_topic = "";
+    //std::string disparity_topic = "";
+    //std::string rectified_left_topic = "";
+    //std::string rectified_right_topic = "";
     std::string landmark_topic = "";
     int disparity_confidence_threshold;
     int rate;
@@ -220,6 +239,9 @@ int main(int argc, char** argv)
     bad_params += !pnh.getParam("rgb_topic", rgb_topic);
     //bad_params += !pnh.getParam("left_topic", left_topic);
     bad_params += !pnh.getParam("right_topic", right_topic);
+    //bad_params += !pnh.getParam("disparity_topic", disparity_topic);
+    //bad_params += !pnh.getParam("rectified_left_topic", rectified_left_topic);
+    //bad_params += !pnh.getParam("rectified_right_topic", rectified_right_topic);
     bad_params += !pnh.getParam("landmark_topic", landmark_topic);
     bad_params += !pnh.getParam("disparity_confidence_threshold", disparity_confidence_threshold);
     bad_params += !pnh.getParam("rate", rate);
