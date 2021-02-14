@@ -3,17 +3,17 @@
  <!--<arg name="manager" />  Must be globally qualified -->
  <arg name="respawn" default="false" />
  <!--<arg name="manager"      default="nodelet_manager" />-->
- <arg name="queue_size"      default="10"/>
+ <arg name="queue_size"      default="100"/>
 
 
 <group ns="depthai">
 
 <!-- This file is used when simulating a depthai -->
         <node pkg="nodelet" type="nodelet" args="manager"
-	     name="depthai_manager" output="screen"/>
+	     name="depthai_manager"/>
 
         <node pkg="nodelet" type="nodelet" name="register" args="load depth_image_proc/register depthai_manager">   
-            <remap from="rgb/camera_info" to="mjpeg/camera_info"/>    
+            <remap from="rgb/camera_info" to="previewout/camera_info"/>    
             <remap from="depth/camera_info" to="depth/camera_info"/>    
             <remap from="depth/image_rect" to="depth/image_raw"/>    
             <remap from="depth_registered/camera_info" to="depth_registered/camera_info"/>    
@@ -21,12 +21,23 @@
             <param name="queue_size" value="$(arg queue_size)"/>    
         </node>    
         <node pkg="nodelet" type="nodelet" name="point_cloud_xyzrgb" args="load depth_image_proc/point_cloud_xyzrgb depthai_manager">   
-            <remap from="rgb/camera_info" to="mjpeg/camera_info"/>    
-            <remap from="rgb/image_rect_color" to="mjpeg/compressed"/>    
+            <remap from="rgb/camera_info" to="previewout/camera_info"/>    
+            <remap from="rgb/image_rect_color" to="previewout/image_raw"/>    
             <remap from="depth_registered/image_rect" to="depth_registered/image_rect"/>    
             <remap from="depth_registered/points" to="depth_registered/points"/>    
             <param name="queue_size" value="$(arg queue_size)"/>    
         </node>
+
+
+
+<!-- The order of args are args="x y z y p r frame_id child_id ms" -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="tf_publisher" args="0 0 0 0 0 0 map previewout "/>
+
+<!-- The order of args are args="x y z y p r frame_id child_id ms" -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="tf_publisher2" args="0 0 0 0 0 0 map depth "/>
+
+<!-- The order of args are args="x y z y p r frame_id child_id ms" -->
+	<node pkg="tf2_ros" type="static_transform_publisher" name="tf_publisher3" args="0 0 0 0 0 0 map video "/>
 </group>
 
 </launch>
