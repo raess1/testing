@@ -1,0 +1,32 @@
+<!-- Sample launch file -->
+<launch>
+ <!--<arg name="manager" />  Must be globally qualified -->
+ <arg name="respawn" default="false" />
+ <!--<arg name="manager"      default="nodelet_manager" />-->
+ <arg name="queue_size"      default="10"/>
+
+
+<group ns="depthai">
+
+<!-- This file is used when simulating a depthai -->
+        <node pkg="nodelet" type="nodelet" args="manager"
+	     name="depthai_manager" output="screen"/>
+
+        <node pkg="nodelet" type="nodelet" name="register" args="load depth_image_proc/register depthai_manager">   
+            <remap from="rgb/camera_info" to="mjpeg/camera_info"/>    
+            <remap from="depth/camera_info" to="depth/camera_info"/>    
+            <remap from="depth/image_rect" to="depth/image_raw"/>    
+            <remap from="depth_registered/camera_info" to="depth_registered/camera_info"/>    
+            <remap from="depth_registered/image_rect" to="depth_registered/image_rect"/>    
+            <param name="queue_size" value="$(arg queue_size)"/>    
+        </node>    
+        <node pkg="nodelet" type="nodelet" name="point_cloud_xyzrgb" args="load depth_image_proc/point_cloud_xyzrgb depthai_manager">   
+            <remap from="rgb/camera_info" to="mjpeg/camera_info"/>    
+            <remap from="rgb/image_rect_color" to="mjpeg/compressed"/>    
+            <remap from="depth_registered/image_rect" to="depth_registered/image_rect"/>    
+            <remap from="depth_registered/points" to="depth_registered/points"/>    
+            <param name="queue_size" value="$(arg queue_size)"/>    
+        </node>
+</group>
+
+</launch>
